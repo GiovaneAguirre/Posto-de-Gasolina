@@ -1,8 +1,27 @@
 
-- Quantidade de litros vendidos: 21
+- Quantidade de litros vendidos: 200
 
-- Valor total arrecadado: R$ 42.00
+- Valor total arrecadado: R$ 400.00
 
-- Quantidade de carros atendidios: 1
+- Quantidade de carros atendidios: 2
 
-- Restam 179 litros no tanque.
+--------------------------
+Carro 1 
+
+Modelo do carro: 1
+
+Cor do carro: 1
+
+Ano de lançamento: 1
+
+--------------------------
+Carro 2 
+
+Modelo do carro: 1
+
+Cor do carro: 1
+
+Ano de lançamento: 1
+
+
+- Restam 0 litros no tanque.

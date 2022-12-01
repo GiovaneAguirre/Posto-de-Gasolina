@@ -10,7 +10,7 @@
 
 struct Tcarro {
   char modelo[20];
-  char cor[10];
+  char cor[20];
   int ano;
 };
 
@@ -47,7 +47,8 @@ int main(void) {
   aux = tamfila;
   
   while (tamfila != aux || tamfila <= 0) {
-    mensagemDeAlerta();
+    printf(C_RED"\nValor inválido.\n"NONE);
+    printf("\nPor favor, insira um número inteiro e maior que zero: ");
     scanf("%f", &tamfila);
     aux = tamfila;
   }
@@ -86,39 +87,45 @@ int main(void) {
       //opcoes do menu
       switch(op){
         case 1:
-          if (fila < tamfila){
-            flush_in();
-            printf("\nInforme o modelo do carro: ");
-            fgets(FilaEspera[fila].modelo,10,stdin);
-            FilaEspera[fila].modelo[strcspn(FilaEspera[fila].modelo, "\n")] = 0;
+          if (tanque > 0) {
             
-            printf("\nInforme a cor do carro: ");
-            fgets(FilaEspera[fila].cor,20,stdin);
-            FilaEspera[fila].cor[strcspn(FilaEspera[fila].cor, "\n")] = 0;
-              
-            printf("\nInforme  o ano do carro: ");
-            scanf("%d", &FilaEspera[fila].ano);
+              if (fila < tamfila){
+                
+                flush_in();
+                printf("\nInforme o modelo do carro: ");
+                fgets(FilaEspera[fila].modelo,20,stdin);
+                FilaEspera[fila].modelo[strcspn(FilaEspera[fila].modelo, "\n")] = 0;
+                
+                printf("\nInforme a cor do carro: ");
+                fgets(FilaEspera[fila].cor,20,stdin);
+                FilaEspera[fila].cor[strcspn(FilaEspera[fila].cor, "\n")] = 0;
+                  
+                printf("\nInforme  o ano do carro: ");
+                scanf("%d", &FilaEspera[fila].ano);
+    
+                fila = fila + 1;
+                  
+                printf(C_GREEN"\nCarro adicionado na fila.\n"NONE);
+                printf(C_BLUE"\nHá %d carro(s) na fila.\n"NONE,fila);
+    
+              }
+              else {
+                msgFila();
+              }
+            }
+            else {
+              printf(C_RED"Não é possível adicionar mais carros, pois não temos mais combústivel no tanque."NONE);
+            }
 
-            fila = fila + 1;
-              
-            printf(C_GREEN"\nCarro adicionado na fila.\n"NONE);
-            printf(C_BLUE"\nHá %d carro(s) na fila.\n"NONE,fila);
-
-          }
-          else {
-            msgFila();
-          }
         break;
         case 2:
-          if (fila != 0) {
             if (tanque <= 0) {
               msgTanqueVazio();
-              fila = fila - 1;
+              fila = 0;
               printf(C_BLUE"\n\nCarros na fila: %d"NONE, fila);
               
-              break;
-            }   
-              else {
+            } 
+              else if (fila > 0) {
                 printf("Quantos litros deseja abastecer? \n");
                 scanf("%d", &litros);
                 while (litros > tanque) {
@@ -142,7 +149,6 @@ int main(void) {
                 }
                 
               }         
-          }
           else {
             printf(C_YELLOW"A fila está vazia, primeiro adicione um carro."NONE);
           }
@@ -199,13 +205,20 @@ int main(void) {
                   break;
   
                 case 'e':
-                  printf(C_BLUE"Arquivo sendo gerado...\n"NONE);
+                  printf(C_BLUE"O arquivo foi gerado.\n"NONE);
                   
                   file  = fopen ("text.txt","w+");
                   fprintf(file,"\n- Quantidade de litros vendidos: %d\n",lvendidos);
                   fprintf(file,"\n- Valor total arrecadado: R$ %.2f\n",vtotal);
-                  fprintf(file,"\n- Quantidade de carros atendidios: %d\n",abastecidos);
-                  fprintf(file,"\n- Restam %d litros no tanque.\n",tanque);
+                  fprintf(file,"\n- Quantidade de carros atendidios: %d\n\n",abastecidos);
+                    for (int i = 0; abastecidos > i; i++) {
+                      fprintf(file,"--------------------------");
+                      fprintf(file,"\nCarro %d \n", i+1);
+                      fprintf(file,"\nModelo do carro: %s\n", CarrosAtendidos[i].modelo);
+                      fprintf(file,"\nCor do carro: %s\n", CarrosAtendidos[i].cor);
+                      fprintf(file,"\nAno de lançamento: %d\n\n", CarrosAtendidos[i].ano);
+                    } 
+                    fprintf(file,"\n- Restam %d litros no tanque.\n",tanque);
                   fclose(file);
   
                   break;
@@ -245,8 +258,7 @@ void mensagemDeAlerta() {
 
 void msgTanqueVazio() {
   printf(C_RED"Infelizmente não temos mais combustivel."NONE);
-  printf(C_RED"\nAté logo, volte sempre."NONE);
-  printf(C_YELLOW"\n\nCarro retirado da fila."NONE);
+  printf(C_YELLOW"\n\nCarro(s) retirado(s) da fila."NONE);
 }
 
 void msgFila() {
